@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class GameManager : MonoBehaviour
 
     [Tooltip("Game Over / You Win screen displayed when the player breaks all breakable blocks")]
     [SerializeField] GameObject _gameOverScreen;
+
+    [Tooltip("Press to start game")]
+    [SerializeField] Button _startGameButton;
 
     // Singleton instance
     public static GameManager Instance { get; private set; }
@@ -53,6 +57,10 @@ public class GameManager : MonoBehaviour
         // Hide the player turret spawn positions sprite
         _playerTurretPosition.GetComponent<SpriteRenderer>().enabled = false;
 
+        // Handle button clicks
+        _startGameButton.onClick.AddListener(OnStartGameButtonClicked);
+
+        // Start a new game
         StartNewGame();
     }
 
@@ -105,5 +113,10 @@ public class GameManager : MonoBehaviour
             // Show the Game Over / You Win screen
             _gameOverScreen.SetActive(true);
         }
+    }
+    
+    void OnStartGameButtonClicked()
+    {
+        Debug.Log("OnStartGameButtonClicked");
     }
 }
