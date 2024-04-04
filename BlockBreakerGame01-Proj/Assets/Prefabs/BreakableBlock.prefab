@@ -144,6 +144,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 1
-  _unbreakable: 0
+  <Unbreakable>k__BackingField: 0
   _blockData: {fileID: 11400000, guid: bcdedcfde189244a49e243828aa4fe25, type: 2}
   _spriteRenderer: {fileID: 1422173109416786994}

@@ -3,7 +3,7 @@ using UnityEngine;
 public class BreakableBlock : MonoBehaviour
 {
     [SerializeField, Range(1, 3)] int _health;
-    [SerializeField] bool _unbreakable;
+    [field:SerializeField] public bool Unbreakable { get; private set; }
     [SerializeField] BlockData _blockData;
     [SerializeField] SpriteRenderer _spriteRenderer;
 
@@ -25,7 +25,7 @@ public class BreakableBlock : MonoBehaviour
     public void DealDamage(int damage)
     {
         // Do not deal damage to an unbreakable block
-        if(_unbreakable)
+        if(Unbreakable)
         {
             return;
         }
@@ -36,6 +36,7 @@ public class BreakableBlock : MonoBehaviour
         if(_health <= 0)
         {
             Destroy(gameObject);
+            GameManager.Instance.OnBreakableBlockDestroyed();
         }
         else
         {
@@ -45,7 +46,7 @@ public class BreakableBlock : MonoBehaviour
 
     void SetHealthColor()
     {
-        if(_unbreakable)
+        if(Unbreakable)
         {
             _spriteRenderer.color = _blockData.UnbreakableBlockolor;
         }
