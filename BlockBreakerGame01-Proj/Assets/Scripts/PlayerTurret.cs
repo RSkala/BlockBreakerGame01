@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,7 +17,7 @@ public class PlayerTurret : MonoBehaviour
 
     void OnFire(InputValue inputValue)
     {
-        GameManager.Instance.PrintDebugPlayerInputString("OnFire - " + inputValue.ToString());
+        FireProjectile();
     }
 
     void OnMouseMove(InputValue inputValue)
@@ -30,6 +28,18 @@ public class PlayerTurret : MonoBehaviour
         // Get the mouse's screen position in world coordinates
         Vector3 mouseWorldPosition = GameManager.Instance.MainCamera.ScreenToWorldPoint(mousePosition);
         _mouseLookPosition = mouseWorldPosition;
-        GameManager.Instance.PrintDebugPlayerInputString("_mouseLookPosition:  " + _mouseLookPosition.ToString());
+    }
+
+    void FireProjectile()
+    {
+        // Get the direction from the turret's fire point to the mouse position
+        Vector2 dirTurretToMouse = (_mouseLookPosition - new Vector2(transform.position.x, transform.position.y)).normalized;
+
+        // Get the signed angle from the 2D world up position to the aiming direction
+        float angle = Vector2.SignedAngle(Vector2.up, dirTurretToMouse);
+
+        // Create the new projectile at the firepoint position, facing in the aiming direction
+        Quaternion projectileRotation = Quaternion.Euler(0.0f, 0.0f, angle);
+        Projectile newProjectile = GameObject.Instantiate(GameManager.Instance.ProjectilePrefab, transform.position, projectileRotation);
     }
 }

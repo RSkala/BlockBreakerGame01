@@ -419,7 +419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39dcc651a90547c0baa36eb071be6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugPlayerInput: 0
+  <ProjectilePrefab>k__BackingField: {fileID: 5627571015695138091, guid: d09c13da8980549e38fc87ea46e7eee5, type: 3}
 --- !u!1 &1608259014
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +433,7 @@ GameObject:
   - component: {fileID: 1608259017}
   - component: {fileID: 1608259018}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: Player Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

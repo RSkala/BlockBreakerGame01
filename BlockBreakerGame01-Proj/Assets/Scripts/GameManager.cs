@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [Tooltip("If true, player input values will be printed to the Unity Console window")]
-    [SerializeField] bool _debugPlayerInput;
+    [Tooltip("The projectile that will be fired from the player turret")]
+    [field:SerializeField] public Projectile ProjectilePrefab { get; private set; }
 
     public static GameManager Instance { get; private set; }
 
@@ -24,13 +24,5 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         MainCamera = Camera.main;
-    }
-
-    public void PrintDebugPlayerInputString(string debugPlayerInputString)
-    {
-        if(_debugPlayerInput)
-        {
-            Debug.Log(debugPlayerInputString);
-        }
     }
 }
