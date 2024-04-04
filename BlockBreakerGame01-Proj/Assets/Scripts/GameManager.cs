@@ -12,6 +12,20 @@ public class GameManager : MonoBehaviour
     [Tooltip("The projectile that will be fired from the player turret")]
     [field:SerializeField] public Projectile ProjectilePrefab { get; private set; }
 
+    [Tooltip("The color of a brick when it has 1 health")]
+    [field:SerializeField] public Color HealthColor1 { get; private set; }
+
+    [Tooltip("The color of a brick when it has 2 health")]
+    [field:SerializeField] public Color HealthColor2 { get; private set; }
+
+    [Tooltip("The color of a brick when it has 3 health")]
+    [field:SerializeField] public Color HealthColor3 { get; private set; }
+
+    [Tooltip("The color of a brick when it is unbreakable")]
+    [field:SerializeField] public Color UnbreakableHealthColor { get; private set; }
+
+    public const float MaxBlockHealth = 3;
+
     public static GameManager Instance { get; private set; }
 
     // Cache the "main" camera to avoid the small overhead of repeatedly calling Camera.main
