@@ -12,11 +12,6 @@ public class PlayerTurret : MonoBehaviour
     // The mouse cursor's current position in game world coordinates
     Vector2 _mouseLookPosition;
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         // Rotate the turret barrel to point in the direction of the mouse position
