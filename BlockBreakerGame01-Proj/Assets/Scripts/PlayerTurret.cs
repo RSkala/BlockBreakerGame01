@@ -16,8 +16,7 @@ public class PlayerTurret : MonoBehaviour
     void Update()
     {
         // Rotate the turret barrel to point in the direction of the mouse position
-        Vector2 dirTurretToMouse = (_mouseLookPosition - new Vector2(transform.position.x, transform.position.y)).normalized;
-        float angle = Vector2.SignedAngle(Vector2.up, dirTurretToMouse);
+        float angle = GetSignedAngleFromTurretToMouse();
         _turretRotationPoint.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
     }
 
@@ -38,11 +37,8 @@ public class PlayerTurret : MonoBehaviour
 
     void FireProjectile()
     {
-        // Get the direction from the turret's fire point to the mouse position
-        Vector2 dirTurretToMouse = (_mouseLookPosition - new Vector2(transform.position.x, transform.position.y)).normalized;
-
-        // Get the signed angle from the 2D world up position to the aiming direction
-        float angle = Vector2.SignedAngle(Vector2.up, dirTurretToMouse);
+        // Get the angle the projectile should fired at
+        float angle = GetSignedAngleFromTurretToMouse();
 
         // Create the new projectile at the firepoint position, facing in the aiming direction
         Quaternion projectileRotation = Quaternion.Euler(0.0f, 0.0f, angle);
@@ -51,5 +47,14 @@ public class PlayerTurret : MonoBehaviour
             _turretFirePoint.position,
             projectileRotation,
             GameManager.Instance.ProjectileParentTransform);
+    }
+
+    float GetSignedAngleFromTurretToMouse()
+    {
+        // Get the direction from the turret's fire point to the mouse position
+        Vector2 dirTurretToMouse = (_mouseLookPosition - new Vector2(transform.position.x, transform.position.y)).normalized;
+
+        // Get the signed angle from the 2D world up position to the aiming direction
+        return Vector2.SignedAngle(Vector2.up, dirTurretToMouse);
     }
 }
