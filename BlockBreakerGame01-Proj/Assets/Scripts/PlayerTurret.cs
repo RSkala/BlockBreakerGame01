@@ -40,6 +40,10 @@ public class PlayerTurret : MonoBehaviour
 
         // Create the new projectile at the firepoint position, facing in the aiming direction
         Quaternion projectileRotation = Quaternion.Euler(0.0f, 0.0f, angle);
-        Projectile newProjectile = GameObject.Instantiate(GameManager.Instance.ProjectilePrefab, transform.position, projectileRotation);
+        GameObject.Instantiate(
+            GameManager.Instance.ProjectilePrefab,
+            transform.position,
+            projectileRotation,
+            GameManager.Instance.ProjectileParentTransform);
     }
 }
