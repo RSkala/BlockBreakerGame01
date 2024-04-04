@@ -60,31 +60,41 @@ public class Projectile : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Ensure that the collided object is a Breakable Block
+        // Check the collided gameObject's component to determine how to handle this projectile collision
         if(collision.gameObject.TryGetComponent<BreakableBlock>(out var breakableBlock))
         {
-            // Get the contact points from the collision
-            List<ContactPoint2D> contactPoints = new List<ContactPoint2D>();
-            int numContacts = collision.GetContacts(contactPoints);
-            if(numContacts > 0)
-            {
-                // Get the first contact point and its contact normal
-                ContactPoint2D contactPoint = contactPoints[0];
-                Vector2 contactNormal = contactPoint.normal;
-
-                // Get the direction of this projectile's forward direction
-                Vector2 forwardMovementDir = _rigidbody2D.transform.up;
-
-                // Calculate the reflection vector
-                Vector2 reflectionVector = Vector2.Reflect(forwardMovementDir, contactNormal);
-
-                // Get the angle between the world up and the reflection vector
-                float angle = Vector2.SignedAngle(Vector2.up, reflectionVector);
-                transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
-            }
+            // Set new projectile rotation
+            SetProjectileRotationFromCollisionData(collision);
 
             // Deal damage to the collided breakable block
             breakableBlock.DealDamage(_damage);
+        }
+        else if(collision.gameObject.TryGetComponent<Wall>(out _))
+        {
+            SetProjectileRotationFromCollisionData(collision);
+        }
+    }
+
+    void SetProjectileRotationFromCollisionData(Collision2D collision)
+    {
+        // Get the contact points from the collision
+        List<ContactPoint2D> contactPoints = new List<ContactPoint2D>();
+        int numContacts = collision.GetContacts(contactPoints);
+        if(numContacts > 0)
+        {
+            // Get the first contact point and its contact normal
+            ContactPoint2D contactPoint = contactPoints[0];
+            Vector2 contactNormal = contactPoint.normal;
+
+            // Get the direction of this projectile's forward direction
+            Vector2 forwardMovementDir = _rigidbody2D.transform.up;
+
+            // Calculate the reflection vector
+            Vector2 reflectionVector = Vector2.Reflect(forwardMovementDir, contactNormal);
+
+            // Get the angle between the world up and the reflection vector
+            float angle = Vector2.SignedAngle(Vector2.up, reflectionVector);
+            transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
         }
     }
 }
