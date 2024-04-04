@@ -52,6 +52,12 @@ public class PlayerTurret : MonoBehaviour
             projectileRotation,
             GameManager.Instance.ProjectileParentTransform);
 
+        // Use the num projectiles launched for naming the new projectile
+        newProjectile.name = "Projectile-" + GameManager.Instance.NumProjectilesLaunched;
+
+        // Increment the number of projectiles launched
+        GameManager.Instance.IncrementNumProjectilesLaunched();
+
         // Log projectile fired to console
         GameManager.Instance.GameLogger.LogProjectileFired(newProjectile);
     }

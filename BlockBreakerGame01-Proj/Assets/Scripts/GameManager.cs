@@ -50,6 +50,9 @@ public class GameManager : MonoBehaviour
     // Game Logger
     public GameLogger GameLogger { get; private set; }
 
+    // The number of projectiles launched during a single game session
+    public int NumProjectilesLaunched { get; private set; }
+
     // Current Game Layout that is playing
     GameLayout _currentGameLayout;
 
@@ -103,6 +106,9 @@ public class GameManager : MonoBehaviour
         // Hide screens
         _startGameScreen.SetActive(false);
         _gameOverScreen.SetActive(false);
+
+        // Reset Projectile count
+        NumProjectilesLaunched = 0;
 
         // Create the projectile parent container in the scene
         CreateProjectileParent();
@@ -179,4 +185,6 @@ public class GameManager : MonoBehaviour
     {
         StartNewGame();
     }
+
+    public void IncrementNumProjectilesLaunched() => NumProjectilesLaunched++;
 }
