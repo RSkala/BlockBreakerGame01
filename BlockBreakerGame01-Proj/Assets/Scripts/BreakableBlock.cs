@@ -6,7 +6,7 @@ public class BreakableBlock : MonoBehaviour
     [SerializeField, Range(1, 5)] int _health;
 
     [Tooltip("This breakable block cannot be damaged")]
-    [field:SerializeField] public bool Unbreakable { get; private set; }
+    [field:SerializeField] public bool Invincible { get; private set; }
 
     [Tooltip("Used for setting values of a breakable block")]
     [SerializeField] BlockData _blockData;
@@ -31,8 +31,8 @@ public class BreakableBlock : MonoBehaviour
 
     public void DealDamage(int damage)
     {
-        // Do not deal damage to an unbreakable block
-        if(Unbreakable)
+        // Do not deal damage to an invincible block
+        if(Invincible)
         {
             return;
         }
@@ -53,7 +53,7 @@ public class BreakableBlock : MonoBehaviour
 
     void SetHealthColor()
     {
-        if(Unbreakable)
+        if(Invincible)
         {
             _spriteRenderer.color = _blockData.UnbreakableBlockolor;
         }

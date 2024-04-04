@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,9 +6,6 @@ public class GameManager : MonoBehaviour
 {
     [Tooltip("The player turret from which projectiles are fired")]
     [SerializeField] PlayerTurret _playerTurretPrefab;
-
-    [Tooltip("Position at which to spawn the player turret")]
-    [SerializeField] Transform _playerTurretPosition;
 
     [Tooltip("The projectile that will be fired from the player turret")]
     [field:SerializeField] public Projectile ProjectilePrefab { get; private set; }
@@ -21,6 +16,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Press to start game")]
     [SerializeField] Button _startGameButton;
 
+    [Tooltip("The list of Game Layouts to choose from to play")]
+    [SerializeField] GameLayout[] _gameLayoutPrefabs;
+
     // Singleton instance
     public static GameManager Instance { get; private set; }
 
@@ -30,8 +28,8 @@ public class GameManager : MonoBehaviour
     // Parent of all fired projectiles. Used for containing the projectiles to keep the Hierarchy view clean.
     public Transform ProjectileParentTransform { get; private set; }
 
-    // Current player turrent
-    PlayerTurret _playerTurret;
+    // Current Game Layout that is playing
+    GameLayout _currentGameLayout;
 
     // Current number of active breakable blocks. Used for checking if the player has broken all breakable blocks.
     int _numActiveBreakableBlocks;
@@ -54,9 +52,6 @@ public class GameManager : MonoBehaviour
         GameObject projectileParent = new GameObject("[Projectiles]");
         ProjectileParentTransform = projectileParent.transform;
 
-        // Hide the player turret spawn positions sprite
-        _playerTurretPosition.GetComponent<SpriteRenderer>().enabled = false;
-
         // Handle button clicks
         _startGameButton.onClick.AddListener(OnStartGameButtonClicked);
 
@@ -66,14 +61,14 @@ public class GameManager : MonoBehaviour
 
     void StartNewGame()
     {
-        // Create player
-        CreatePlayerTurret();
+        // Create Game Layout
+        CreateGameLayout();
 
         // Hide game over screen
         _gameOverScreen.SetActive(false);
 
         // Get the number of breakable blocks in the scene for checking game over
-        _numActiveBreakableBlocks = GetNumActiveBreakableBlocks();
+        _numActiveBreakableBlocks = _currentGameLayout.NumBreakableBlocks;
 
         // Ensure there is at least 1 breakable block
         if(_numActiveBreakableBlocks <= 0)
@@ -82,24 +77,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void CreatePlayerTurret()
+    void CreateGameLayout()
     {
-        // Create the player turret at the spawn point
-        _playerTurret = GameObject.Instantiate(_playerTurretPrefab, _playerTurretPosition.position, Quaternion.identity);
-        _playerTurret.name = "Player Turret";
-    }
+        if(_gameLayoutPrefabs.Length <= 0)
+        {
+            Debug.LogError("There are no game layout prefabs assigned in the GameManager Inspector. A game will not be created.");
+            return;
+        }
 
-    int GetNumActiveBreakableBlocks()
-    {
-        // Find all Breakable Blocks in the scene
-        List<BreakableBlock> breakableBlocks = Object.FindObjectsByType<BreakableBlock>(FindObjectsSortMode.None).ToList();
-
-        // Filter out the blocks marked "Unbreakable"
-        breakableBlocks.RemoveAll((breakableBlock) => {
-            return breakableBlock.Unbreakable;
-        });
-
-        return breakableBlocks.Count;
+        // Choose a random game layout from the list of game layout prefabs
+        int randomIdx = Random.Range(0, _gameLayoutPrefabs.Length);
+        _currentGameLayout = GameObject.Instantiate(_gameLayoutPrefabs[randomIdx]);
+        _currentGameLayout.Init(_playerTurretPrefab);
     }
 
     public void OnBreakableBlockDestroyed()
@@ -107,8 +96,8 @@ public class GameManager : MonoBehaviour
         --_numActiveBreakableBlocks;
         if(_numActiveBreakableBlocks <= 0)
         {
-            // Player has destroyed all breakable blocks in the scene. Remove the player turret.
-            Destroy(_playerTurret.gameObject);
+            // Player has destroyed all breakable blocks in the scene. Remove the current game layout.
+            Destroy(_currentGameLayout.gameObject);
 
             // Show the Game Over / You Win screen
             _gameOverScreen.SetActive(true);
@@ -117,6 +106,6 @@ public class GameManager : MonoBehaviour
     
     void OnStartGameButtonClicked()
     {
-        Debug.Log("OnStartGameButtonClicked");
+        StartNewGame();
     }
 }
