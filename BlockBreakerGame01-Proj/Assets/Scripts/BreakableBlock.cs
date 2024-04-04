@@ -4,8 +4,8 @@ public class BreakableBlock : MonoBehaviour
 {
     [SerializeField, Range(1, 3)] int _health;
     [SerializeField] bool _unbreakable;
-
-    SpriteRenderer _spriteRenderer;
+    [SerializeField] BlockData _blockData;
+    [SerializeField] SpriteRenderer _spriteRenderer;
 
     void Start()
     {
@@ -14,7 +14,11 @@ public class BreakableBlock : MonoBehaviour
             Debug.LogWarning("BreakableBlock.Start - _health is invalid: " + _health + ". Check the Inspector values in the prefab.");
         }
 
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        SetHealthColor();
+    }
+
+    void OnValidate()
+    {
         SetHealthColor();
     }
 
@@ -43,15 +47,15 @@ public class BreakableBlock : MonoBehaviour
     {
         if(_unbreakable)
         {
-            _spriteRenderer.color = GameManager.Instance.UnbreakableBlockolor;
+            _spriteRenderer.color = _blockData.UnbreakableBlockolor;
         }
         else
         {
             switch(_health)
             {
-                case 1: _spriteRenderer.color = GameManager.Instance.BlockHealthColor1; break;
-                case 2: _spriteRenderer.color = GameManager.Instance.BlockHealthColor2; break;
-                case 3: _spriteRenderer.color = GameManager.Instance.BlockHealthColor3; break;
+                case 1: _spriteRenderer.color = _blockData.BlockHealthColor1; break;
+                case 2: _spriteRenderer.color = _blockData.BlockHealthColor2; break;
+                case 3: _spriteRenderer.color = _blockData.BlockHealthColor3; break;
                 default: break;
             }
         }
