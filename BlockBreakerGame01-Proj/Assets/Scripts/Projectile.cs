@@ -83,6 +83,9 @@ public class Projectile : MonoBehaviour
                 float angle = Vector2.SignedAngle(Vector2.up, reflectionVector);
                 transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
             }
+
+            // Deal damage to the collided breakable block
+            breakableBlock.DealDamage(_damage);
         }
     }
 }
