@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class BreakableBlock : MonoBehaviour
 {
-    [SerializeField] int _health;
+    [SerializeField, Range(1, 3)] int _health;
+    [SerializeField] bool _unbreakable;
 
     SpriteRenderer _spriteRenderer;
 
@@ -19,6 +20,12 @@ public class BreakableBlock : MonoBehaviour
 
     public void DealDamage(int damage)
     {
+        // Do not deal damage to an unbreakable block
+        if(_unbreakable)
+        {
+            return;
+        }
+
         // Handle damage and remove this block from the scene if it runs out of health
         _health -= damage;
         _health = Mathf.Max(_health, 0);
@@ -34,12 +41,19 @@ public class BreakableBlock : MonoBehaviour
 
     void SetHealthColor()
     {
-        switch(_health)
+        if(_unbreakable)
         {
-            case 1: _spriteRenderer.color = GameManager.Instance.HealthColor1; break;
-            case 2: _spriteRenderer.color = GameManager.Instance.HealthColor2; break;
-            case 3: _spriteRenderer.color = GameManager.Instance.HealthColor3; break;
-            default: break;
+            _spriteRenderer.color = GameManager.Instance.UnbreakableBlockolor;
+        }
+        else
+        {
+            switch(_health)
+            {
+                case 1: _spriteRenderer.color = GameManager.Instance.BlockHealthColor1; break;
+                case 2: _spriteRenderer.color = GameManager.Instance.BlockHealthColor2; break;
+                case 3: _spriteRenderer.color = GameManager.Instance.BlockHealthColor3; break;
+                default: break;
+            }
         }
     }
 }
