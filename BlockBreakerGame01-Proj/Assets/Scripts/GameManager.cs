@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,8 +15,11 @@ public class GameManager : MonoBehaviour
     [Tooltip("Title / Start Game screen. Displayed when the game starts")]
     [SerializeField] GameObject _startGameScreen;
 
-    [Tooltip("Press to start game during the Title / Start Game screen")]
-    [SerializeField] Button _startGameButton;
+    [Tooltip("Press to start playing the game layouts in order")]
+    [SerializeField] Button _startInOrderGameButton;
+
+    [Tooltip("Press to start playing the game layouts in random order")]
+    [SerializeField] Button _startRandomGameButton;
 
     [Tooltip("Game Over / You Win screen displayed when the player breaks all breakable blocks")]
     [SerializeField] GameObject _gameOverScreen;
@@ -59,6 +64,21 @@ public class GameManager : MonoBehaviour
     // Current number of active breakable blocks. Used for checking if the player has broken all breakable blocks.
     int _numActiveBreakableBlocks;
 
+    // Order in which the levels are played
+    GameProgressionType _gameProgressionType;
+
+    // For an InOrder game, the index of the current GameLayout in the list
+    int _inOrderGameCurrentIdx;
+
+    // For a Random game, the list of GameLayouts that have not yet been played
+    List<GameLayout> _availableRandomGameLayouts;
+
+    enum GameProgressionType
+    {
+        InOrder,
+        Random
+    }
+
     void Awake()
     {
         if(Instance != null)
@@ -77,7 +97,8 @@ public class GameManager : MonoBehaviour
         CreateGameLogger();
 
         // Handle button clicks
-        _startGameButton.onClick.AddListener(OnStartGameButtonClicked);
+        _startInOrderGameButton.onClick.AddListener(OnStartInOrderGameButtonClicked);
+        _startRandomGameButton.onClick.AddListener(OnStartRandomGameButtonClicked);
         _playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
 
         // Show Title screen
@@ -86,6 +107,11 @@ public class GameManager : MonoBehaviour
         if(_gameLayoutOverride != null)
         {
             Debug.LogWarning("_gameLayoutOverride is not null. This will ALWAYS be used as the game layout.");
+        }
+
+        if(_gameLayoutPrefabs.Length <= 0 && _gameLayoutOverride != null)
+        {
+            Debug.LogWarning("There are no game layout prefabs assigned in the GameManager Inspector. A game will not be created.");
         }
     }
 
@@ -99,6 +125,75 @@ public class GameManager : MonoBehaviour
         GameObject gameLoggerGO = new GameObject("Game Logger");
         GameLogger = gameLoggerGO.AddComponent<GameLogger>();
         GameLogger.transform.SetParent(transform);
+    }
+
+    void StartInOrderGame()
+    {
+        // Set the game type
+        _gameProgressionType = GameProgressionType.InOrder;
+
+        // Set the index into the game layout prefab list
+        _inOrderGameCurrentIdx = 0;
+
+        // Get the first game layout
+        _currentGameLayout = _gameLayoutPrefabs[_inOrderGameCurrentIdx];
+
+        // Start the game
+        StartNewGame();
+    }
+
+    void ContinueInOrderGame()
+    {
+        // Increment the index into the game layout prefab list and ensure it does not overrun
+        _inOrderGameCurrentIdx++;
+        if(_inOrderGameCurrentIdx >= _gameLayoutPrefabs.Length)
+        {
+            _inOrderGameCurrentIdx = 0;
+        }
+
+        // Get the game layout at the current index
+        _currentGameLayout = _gameLayoutPrefabs[_inOrderGameCurrentIdx];
+
+        // Start the game
+        StartNewGame();
+    }
+
+    void StartRandomGame()
+    {
+        // Set the game type
+        _gameProgressionType = GameProgressionType.Random;
+
+        // Set the available game layouts to all of the game layout prefabs
+        _availableRandomGameLayouts = _gameLayoutPrefabs.ToList();
+
+        // Get a random index into the available list
+        int randomIdx = Random.Range(0, _availableRandomGameLayouts.Count);
+
+        // Get the game layout and remove the game layout from the available list
+        _currentGameLayout = _availableRandomGameLayouts[randomIdx];
+        _availableRandomGameLayouts.Remove(_currentGameLayout);
+
+        // Start the game
+        StartNewGame();
+    }
+
+    void ContinueRandomGame()
+    {
+        if(_availableRandomGameLayouts.Count <= 0)
+        {
+            // The available game layout list is empty. Reset it.
+            _availableRandomGameLayouts = _gameLayoutPrefabs.ToList();
+        }
+
+        // Get a random index into the available list
+        int randomIdx = Random.Range(0, _availableRandomGameLayouts.Count);
+
+        // Get the game layout and remove the game layout from the available list
+        _currentGameLayout = _availableRandomGameLayouts[randomIdx];
+        _availableRandomGameLayouts.Remove(_currentGameLayout);
+
+        // Start the game
+        StartNewGame();
     }
 
     void StartNewGame()
@@ -149,15 +244,7 @@ public class GameManager : MonoBehaviour
             return _gameLayoutOverride;
         }
 
-        if(_gameLayoutPrefabs.Length <= 0)
-        {
-            Debug.LogError("There are no game layout prefabs assigned in the GameManager Inspector. A game will not be created.");
-            return null;
-        }
-
-        // Choose a random game layout from the list of game layout prefabs
-        int randomIdx = Random.Range(0, _gameLayoutPrefabs.Length);
-        return _gameLayoutPrefabs[randomIdx];
+        return _currentGameLayout;
     }
 
     public void OnBreakableBlockDestroyed()
@@ -175,15 +262,27 @@ public class GameManager : MonoBehaviour
             _gameOverScreen.SetActive(true);
         }
     }
-    
-    void OnStartGameButtonClicked()
+
+    void OnStartInOrderGameButtonClicked()
     {
-        StartNewGame();
+        StartInOrderGame();
+    }
+
+    void OnStartRandomGameButtonClicked()
+    {
+        StartRandomGame();
     }
 
     void OnPlayAgainButtonClicked()
     {
-        StartNewGame();
+        if(_gameProgressionType == GameProgressionType.InOrder)
+        {
+            ContinueInOrderGame();
+        }
+        else
+        {
+            ContinueRandomGame();
+        }
     }
 
     public void IncrementNumProjectilesLaunched() => NumProjectilesLaunched++;
