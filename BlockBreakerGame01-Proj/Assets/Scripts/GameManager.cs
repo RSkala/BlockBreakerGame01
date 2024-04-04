@@ -10,11 +10,17 @@ public class GameManager : MonoBehaviour
     [Tooltip("The projectile that will be fired from the player turret")]
     [field:SerializeField] public Projectile ProjectilePrefab { get; private set; }
 
+    [Tooltip("Title / Start Game screen. Displayed when the game starts")]
+    [SerializeField] GameObject _startGameScreen;
+
+    [Tooltip("Press to start game during the Title / Start Game screen")]
+    [SerializeField] Button _startGameButton;
+
     [Tooltip("Game Over / You Win screen displayed when the player breaks all breakable blocks")]
     [SerializeField] GameObject _gameOverScreen;
 
-    [Tooltip("Press to start game")]
-    [SerializeField] Button _startGameButton;
+    [Tooltip("Press to start game in the Game Over / You Win screen")]
+    [SerializeField] Button _playAgainButton;
 
     [Tooltip("The list of Game Layouts to choose from to play")]
     [SerializeField] GameLayout[] _gameLayoutPrefabs;
@@ -54,18 +60,20 @@ public class GameManager : MonoBehaviour
 
         // Handle button clicks
         _startGameButton.onClick.AddListener(OnStartGameButtonClicked);
+        _playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
 
-        // Start a new game
-        StartNewGame();
+        // Show Title screen
+        _startGameScreen.SetActive(true);
     }
 
     void StartNewGame()
     {
+        // Hide screens
+        _startGameScreen.SetActive(false);
+        _gameOverScreen.SetActive(false);
+
         // Create Game Layout
         CreateGameLayout();
-
-        // Hide game over screen
-        _gameOverScreen.SetActive(false);
 
         // Get the number of breakable blocks in the scene for checking game over
         _numActiveBreakableBlocks = _currentGameLayout.NumBreakableBlocks;
@@ -105,6 +113,11 @@ public class GameManager : MonoBehaviour
     }
     
     void OnStartGameButtonClicked()
+    {
+        StartNewGame();
+    }
+
+    void OnPlayAgainButtonClicked()
     {
         StartNewGame();
     }
