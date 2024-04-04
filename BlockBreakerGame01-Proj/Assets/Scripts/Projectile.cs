@@ -76,8 +76,7 @@ public class Projectile : MonoBehaviour
                 Vector2 forwardMovementDir = _rigidbody2D.transform.up;
 
                 // Calculate the reflection vector
-                // Reflection = incoming - 2*Dot(incoming, contact-normal)*normal
-                Vector2 reflectionVector = forwardMovementDir - (2.0f * Vector2.Dot(forwardMovementDir, contactNormal) * contactNormal);
+                Vector2 reflectionVector = Vector2.Reflect(forwardMovementDir, contactNormal);
 
                 // Get the angle between the world up and the reflection vector
                 float angle = Vector2.SignedAngle(Vector2.up, reflectionVector);
