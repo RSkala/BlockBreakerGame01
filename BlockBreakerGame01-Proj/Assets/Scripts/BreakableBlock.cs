@@ -2,9 +2,16 @@ using UnityEngine;
 
 public class BreakableBlock : MonoBehaviour
 {
-    [SerializeField, Range(1, 3)] int _health;
+    [Tooltip("Health value for a breakable block. Will take this many hits before it is destroyed.")]
+    [SerializeField, Range(1, 5)] int _health;
+
+    [Tooltip("This breakable block cannot be damaged")]
     [field:SerializeField] public bool Unbreakable { get; private set; }
+
+    [Tooltip("Used for setting values of a breakable block")]
     [SerializeField] BlockData _blockData;
+
+    [Tooltip("Used for setting the color of a block which represents its damage state")]
     [SerializeField] SpriteRenderer _spriteRenderer;
 
     void Start()
@@ -57,6 +64,8 @@ public class BreakableBlock : MonoBehaviour
                 case 1: _spriteRenderer.color = _blockData.BlockHealthColor1; break;
                 case 2: _spriteRenderer.color = _blockData.BlockHealthColor2; break;
                 case 3: _spriteRenderer.color = _blockData.BlockHealthColor3; break;
+                case 4: _spriteRenderer.color = _blockData.BlockHealthColor4; break;
+                case 5: _spriteRenderer.color = _blockData.BlockHealthColor5; break;
                 default: break;
             }
         }

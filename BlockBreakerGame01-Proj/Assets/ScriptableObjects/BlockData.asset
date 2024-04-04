@@ -15,4 +15,6 @@ MonoBehaviour:
   <BlockHealthColor1>k__BackingField: {r: 1, g: 0, b: 0, a: 1}
   <BlockHealthColor2>k__BackingField: {r: 1, g: 1, b: 0, a: 1}
   <BlockHealthColor3>k__BackingField: {r: 0, g: 1, b: 0, a: 1}
+  <BlockHealthColor4>k__BackingField: {r: 0, g: 0, b: 1, a: 1}
+  <BlockHealthColor5>k__BackingField: {r: 0.7176471, g: 0, b: 1, a: 1}
   <UnbreakableBlockolor>k__BackingField: {r: 0.49803922, g: 0.49803922, b: 0.49803922, a: 1}
