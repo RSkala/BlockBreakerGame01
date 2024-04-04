@@ -42,9 +42,9 @@ public class BreakableBlock : MonoBehaviour
         _health = Mathf.Max(_health, 0);
         if(_health <= 0)
         {
-            GameManager.Instance.GameLogger.LogBlockDestroyed(this);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             GameManager.Instance.OnBreakableBlockDestroyed();
+            GameManager.Instance.GameLogger.LogBlockDestroyed(this);
         }
         else
         {
