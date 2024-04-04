@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerTurret : MonoBehaviour
 {
+    [SerializeField] Transform _turretFirePoint;
+    [SerializeField] Transform _turretRotationPoint;
+
     Vector2 _mouseLookPosition;
 
     void Start()
@@ -12,7 +15,10 @@ public class PlayerTurret : MonoBehaviour
 
     void Update()
     {
-        
+        // Rotate the turret barrel to point in the direction of the mouse position
+        Vector2 dirTurretToMouse = (_mouseLookPosition - new Vector2(transform.position.x, transform.position.y)).normalized;
+        float angle = Vector2.SignedAngle(Vector2.up, dirTurretToMouse);
+        _turretRotationPoint.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
     }
 
     void OnFire(InputValue inputValue)
@@ -42,7 +48,7 @@ public class PlayerTurret : MonoBehaviour
         Quaternion projectileRotation = Quaternion.Euler(0.0f, 0.0f, angle);
         GameObject.Instantiate(
             GameManager.Instance.ProjectilePrefab,
-            transform.position,
+            _turretFirePoint.position,
             projectileRotation,
             GameManager.Instance.ProjectileParentTransform);
     }
