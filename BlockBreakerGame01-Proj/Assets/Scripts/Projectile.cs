@@ -63,6 +63,9 @@ public class Projectile : MonoBehaviour
         // Check the collided gameObject's component to determine how to handle this projectile collision
         if(collision.gameObject.TryGetComponent<BreakableBlock>(out var breakableBlock))
         {
+            // Log this projectile's collision with a block
+            GameManager.Instance.GameLogger.LogProjectileHitBlock(this, breakableBlock);
+
             // Set new projectile rotation
             SetProjectileRotationFromCollisionData(collision);
 

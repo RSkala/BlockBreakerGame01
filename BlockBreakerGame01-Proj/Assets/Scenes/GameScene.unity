@@ -1090,6 +1090,9 @@ MonoBehaviour:
   - {fileID: 8602943835231455188, guid: 09b871460b5ca4dca843367eb718b1d2, type: 3}
   - {fileID: 8602943835231455188, guid: f4503461a9c9642e9b4e4ebe18b6a49f, type: 3}
   _gameLayoutOverride: {fileID: 0}
+  <EnableLogger>k__BackingField: 1
+  <LogMessagesToUnityConsole>k__BackingField: 0
+  <MaxVisibleLoggerMessages>k__BackingField: 40
 --- !u!1 &1508985600
 GameObject:
   m_ObjectHideFlags: 0

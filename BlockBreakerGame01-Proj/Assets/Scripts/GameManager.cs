@@ -25,8 +25,18 @@ public class GameManager : MonoBehaviour
     [Tooltip("The list of Game Layouts to choose from to play")]
     [SerializeField] GameLayout[] _gameLayoutPrefabs;
 
+    [Header("Debug")]
     [Tooltip("Always use the selected game layout. This will override the layout prefab list and should be for debugging only!")]
     [SerializeField] GameLayout _gameLayoutOverride;
+
+    [Tooltip("Enable/Disable Console Logger")]
+    [field:SerializeField] public bool EnableLogger { get; private set; } = true;
+
+    [Tooltip("Whether or not to print Console Logger messages to the Unity Console window")]
+    [field:SerializeField] public bool LogMessagesToUnityConsole { get; private set; } = false;
+
+    [Tooltip("Maximum number of log messages visible on the screen")]
+    [field:SerializeField] public int MaxVisibleLoggerMessages { get; private set; }
 
     // Singleton instance
     public static GameManager Instance { get; private set; }
@@ -36,6 +46,9 @@ public class GameManager : MonoBehaviour
 
     // Parent of all fired projectiles. Used for containing the projectiles to keep the Hierarchy view clean.
     public Transform ProjectileParentTransform { get; private set; }
+
+    // Game Logger
+    public GameLogger GameLogger { get; private set; }
 
     // Current Game Layout that is playing
     GameLayout _currentGameLayout;
@@ -57,6 +70,9 @@ public class GameManager : MonoBehaviour
     {
         MainCamera = Camera.main;
 
+        // Create the game logger
+        CreateGameLogger();
+
         // Handle button clicks
         _startGameButton.onClick.AddListener(OnStartGameButtonClicked);
         _playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
@@ -68,6 +84,18 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("_gameLayoutOverride is not null. This will ALWAYS be used as the game layout.");
         }
+    }
+
+    void OnValidate()
+    {
+        MaxVisibleLoggerMessages = Mathf.Max(1, MaxVisibleLoggerMessages);
+    }
+
+    void CreateGameLogger()
+    {
+        GameObject gameLoggerGO = new GameObject("Game Logger");
+        GameLogger = gameLoggerGO.AddComponent<GameLogger>();
+        GameLogger.transform.SetParent(transform);
     }
 
     void StartNewGame()
@@ -90,6 +118,9 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("There are no active breakable blocks in the scene on game start. Check the scene.");
         }
+
+        // Clear the logs from any previous game sessions
+        GameLogger.ClearConsoleLogs();
     }
 
     void CreateProjectileParent()
