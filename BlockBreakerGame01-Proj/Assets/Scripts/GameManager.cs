@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("The list of Game Layouts to choose from to play")]
     [SerializeField] GameLayout[] _gameLayoutPrefabs;
 
+    [Tooltip("Always use the selected game layout. This will override the layout prefab list and should be for debugging only!")]
+    [SerializeField] GameLayout _gameLayoutOverride;
+
     // Singleton instance
     public static GameManager Instance { get; private set; }
 
@@ -54,16 +57,17 @@ public class GameManager : MonoBehaviour
     {
         MainCamera = Camera.main;
 
-        // Create the projectile parent in the scene
-        GameObject projectileParent = new GameObject("[Projectiles]");
-        ProjectileParentTransform = projectileParent.transform;
-
         // Handle button clicks
         _startGameButton.onClick.AddListener(OnStartGameButtonClicked);
         _playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
 
         // Show Title screen
         _startGameScreen.SetActive(true);
+
+        if(_gameLayoutOverride != null)
+        {
+            Debug.LogWarning("_gameLayoutOverride is not null. This will ALWAYS be used as the game layout.");
+        }
     }
 
     void StartNewGame()
@@ -71,6 +75,9 @@ public class GameManager : MonoBehaviour
         // Hide screens
         _startGameScreen.SetActive(false);
         _gameOverScreen.SetActive(false);
+
+        // Create the projectile parent container in the scene
+        CreateProjectileParent();
 
         // Create Game Layout
         CreateGameLayout();
@@ -85,18 +92,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void CreateProjectileParent()
+    {
+        GameObject projectileParent = new GameObject("[Projectiles]");
+        ProjectileParentTransform = projectileParent.transform;
+    }
+
     void CreateGameLayout()
     {
+        GameLayout gameLayoutPrefab = GetGameLayoutPrefab();
+        _currentGameLayout = GameObject.Instantiate(gameLayoutPrefab);
+        _currentGameLayout.Init(_playerTurretPrefab);
+    }
+
+    GameLayout GetGameLayoutPrefab()
+    {
+        if(_gameLayoutOverride != null)
+        {
+            return _gameLayoutOverride;
+        }
+
         if(_gameLayoutPrefabs.Length <= 0)
         {
             Debug.LogError("There are no game layout prefabs assigned in the GameManager Inspector. A game will not be created.");
-            return;
+            return null;
         }
 
         // Choose a random game layout from the list of game layout prefabs
         int randomIdx = Random.Range(0, _gameLayoutPrefabs.Length);
-        _currentGameLayout = GameObject.Instantiate(_gameLayoutPrefabs[randomIdx]);
-        _currentGameLayout.Init(_playerTurretPrefab);
+        return _gameLayoutPrefabs[randomIdx];
     }
 
     public void OnBreakableBlockDestroyed()
@@ -106,6 +130,9 @@ public class GameManager : MonoBehaviour
         {
             // Player has destroyed all breakable blocks in the scene. Remove the current game layout.
             Destroy(_currentGameLayout.gameObject);
+
+            // Destroy the projectile parent transform, so all active projectiles will be destroyed
+            Destroy(ProjectileParentTransform.gameObject);
 
             // Show the Game Over / You Win screen
             _gameOverScreen.SetActive(true);
