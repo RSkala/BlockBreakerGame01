@@ -3,9 +3,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerTurret : MonoBehaviour
 {
+    [Tooltip("The point at which a projectile will be fired from")]
     [SerializeField] Transform _turretFirePoint;
+    
+    [Tooltip("Rotation point of the turret's barrel")]
     [SerializeField] Transform _turretRotationPoint;
 
+    // The mouse cursor's current position in game world coordinates
     Vector2 _mouseLookPosition;
 
     void Start()
