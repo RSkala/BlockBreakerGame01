@@ -314,7 +314,11 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(_endGameDelay);
 
         // Player has destroyed all breakable blocks in the scene. Remove the current game layout.
-        Destroy(_currentGameLayout.gameObject);
+        // Check for null, as it is null on some rare occasions, possibly from garbage collection.
+        if(_currentGameLayout != null)
+        {
+            Destroy(_currentGameLayout.gameObject);
+        }
 
         // Deactivate all projectiles in the pool
         SetAllProjectilesInactive();
