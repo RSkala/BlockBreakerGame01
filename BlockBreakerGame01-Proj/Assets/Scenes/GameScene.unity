@@ -1366,6 +1366,12 @@ MonoBehaviour:
   - {fileID: 8602943835231455188, guid: 652f3aa843dd44ff8b95aadefa5a9d05, type: 3}
   - {fileID: 8602943835231455188, guid: 09b871460b5ca4dca843367eb718b1d2, type: 3}
   - {fileID: 8602943835231455188, guid: f4503461a9c9642e9b4e4ebe18b6a49f, type: 3}
+  - {fileID: 7500113574312088933, guid: 3379c73118bbb44cb9db81130a743746, type: 3}
+  - {fileID: 725341798333833556, guid: 8ae197d8222354766b156171f87b2238, type: 3}
+  - {fileID: 3759192873317011929, guid: 18bd8be278143488687ef094fb829bb4, type: 3}
+  - {fileID: 6751637640674908605, guid: 07e7b5202a5f9424bb5d3feb34e1b403, type: 3}
+  - {fileID: 2135639211436797621, guid: 046ead3e9ef864a3e8cc01e4a7d5f992, type: 3}
+  - {fileID: 4987802174541768929, guid: f586db4fb191a43a684aba5bd296a830, type: 3}
   _startGameScreen: {fileID: 855783927}
   _startInOrderGameButton: {fileID: 924093334}
   _startRandomGameButton: {fileID: 798054655}
