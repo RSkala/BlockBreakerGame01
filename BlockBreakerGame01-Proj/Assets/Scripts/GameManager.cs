@@ -39,6 +39,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("Information about the player's projectiles at game end")]
     [SerializeField] Text _projectileSummaryText;
 
+    [Tooltip("How long the player took to finish the level")]
+    [SerializeField] Text _gameSessionTimeText;
+
     [Header("Debug")]
     [Tooltip("Always use the selected game layout. This will override the layout prefab list and should be for debugging only!")]
     [SerializeField] GameLayout _gameLayoutOverride;
@@ -81,6 +84,12 @@ public class GameManager : MonoBehaviour
 
     // For a Random game, the list of GameLayouts that have not yet been played
     List<GameLayout> _availableRandomGameLayouts;
+
+    // The time at which the most recent game started
+    float _gameStartTime;
+
+    // The elapsed time the player played the most recent game session
+    float _gameSessionTime;
 
     enum GameProgressionType
     {
@@ -244,6 +253,9 @@ public class GameManager : MonoBehaviour
 
         // Clear the logs from any previous game sessions
         GameLogger.ClearConsoleLogs();
+
+        // Record the current time
+        _gameStartTime = Time.realtimeSinceStartup;
     }
 
     void CreateProjectileParent()
@@ -274,6 +286,9 @@ public class GameManager : MonoBehaviour
         --_numActiveBreakableBlocks;
         if(_numActiveBreakableBlocks <= 0)
         {
+            // Record game session time elapsed
+            _gameSessionTime = Time.realtimeSinceStartup - _gameStartTime;
+
             // Player has destroyed all breakable blocks in the scene. End the game after a delay.
             StartCoroutine(EndGame());
         }
@@ -291,6 +306,9 @@ public class GameManager : MonoBehaviour
 
         // Set projectile summary text
         _projectileSummaryText.text = "You fired " + NumProjectilesLaunched + " projectiles this round!";
+
+        // Set game time text
+        _gameSessionTimeText.text = "You took " + System.Math.Round(_gameSessionTime, 2) + " seconds to beat this level!";
 
         // Show the Game Over / You Win screen
         _gameOverScreen.SetActive(true);
