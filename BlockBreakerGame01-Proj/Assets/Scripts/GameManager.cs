@@ -113,6 +113,9 @@ public class GameManager : MonoBehaviour
         // Show Title screen
         _startGameScreen.SetActive(true);
 
+        // On Start, find any GameLayouts and destroy them. This is to help iteration time when building and testing GameLayouts
+        DestroyActiveGameLayouts();
+
         if(_gameLayoutOverride != null)
         {
             Debug.LogWarning("_gameLayoutOverride is not null. This will ALWAYS be used as the game layout.");
@@ -121,6 +124,16 @@ public class GameManager : MonoBehaviour
         if(_gameLayoutPrefabs.Length <= 0 && _gameLayoutOverride != null)
         {
             Debug.LogWarning("There are no game layout prefabs assigned in the GameManager Inspector. A game will not be created.");
+        }
+    }
+
+    void DestroyActiveGameLayouts()
+    {
+        GameLayout[] activeGameLayouts = Object.FindObjectsByType<GameLayout>(FindObjectsSortMode.None);
+        foreach(GameLayout activeGameLayout in activeGameLayouts)
+        {
+            Debug.Log("destroying active game layout " + activeGameLayout.name);
+            Destroy(activeGameLayout.gameObject);
         }
     }
 
