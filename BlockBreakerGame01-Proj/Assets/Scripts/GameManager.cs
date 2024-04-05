@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,6 +12,9 @@ public class GameManager : MonoBehaviour
 
     [Tooltip("The projectile that will be fired from the player turret")]
     [field:SerializeField] public Projectile ProjectilePrefab { get; private set; }
+
+    [Tooltip("Number of seconds to wait until after the last brick is broken to display the game over screen")]
+    [SerializeField] float _endGameDelay;
 
     [Tooltip("Title / Start Game screen. Displayed when the game starts")]
     [SerializeField] GameObject _startGameScreen;
@@ -252,15 +256,23 @@ public class GameManager : MonoBehaviour
         --_numActiveBreakableBlocks;
         if(_numActiveBreakableBlocks <= 0)
         {
-            // Player has destroyed all breakable blocks in the scene. Remove the current game layout.
-            Destroy(_currentGameLayout.gameObject);
-
-            // Destroy the projectile parent transform, so all active projectiles will be destroyed
-            Destroy(ProjectileParentTransform.gameObject);
-
-            // Show the Game Over / You Win screen
-            _gameOverScreen.SetActive(true);
+            // Player has destroyed all breakable blocks in the scene. End the game after a delay.
+            StartCoroutine(EndGame());
         }
+    }
+
+    IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(_endGameDelay);
+
+        // Player has destroyed all breakable blocks in the scene. Remove the current game layout.
+        Destroy(_currentGameLayout.gameObject);
+
+        // Destroy the projectile parent transform, so all active projectiles will be destroyed
+        Destroy(ProjectileParentTransform.gameObject);
+
+        // Show the Game Over / You Win screen
+        _gameOverScreen.SetActive(true);
     }
 
     void OnStartInOrderGameButtonClicked()

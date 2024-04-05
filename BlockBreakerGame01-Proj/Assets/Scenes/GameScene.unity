@@ -1281,6 +1281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerTurretPrefab: {fileID: 8454559453444742606, guid: 4555d78a27dde4236add83afa96a6dfb, type: 3}
   <ProjectilePrefab>k__BackingField: {fileID: 5627571015695138091, guid: d09c13da8980549e38fc87ea46e7eee5, type: 3}
+  _endGameDelay: 2
   _startGameScreen: {fileID: 855783927}
   _startInOrderGameButton: {fileID: 924093334}
   _startRandomGameButton: {fileID: 798054655}
