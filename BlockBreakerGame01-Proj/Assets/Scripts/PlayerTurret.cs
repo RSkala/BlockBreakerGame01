@@ -39,16 +39,12 @@ public class PlayerTurret : MonoBehaviour
         // Get the angle the projectile should fired at
         float angle = GetSignedAngleFromTurretToMouse();
 
-        // Create the new projectile at the firepoint position, facing in the aiming direction
+        // Get next available projectile from the pool and place it at the firepoint position, facing in the aiming direction
         Quaternion projectileRotation = Quaternion.Euler(0.0f, 0.0f, angle);
-        Projectile newProjectile = GameObject.Instantiate(
-            GameManager.Instance.ProjectilePrefab,
-            _turretFirePoint.position,
-            projectileRotation,
-            GameManager.Instance.ProjectileParentTransform);
-
-        // Use the num projectiles launched for naming the new projectile
-        newProjectile.name = "Projectile-" + GameManager.Instance.NumProjectilesLaunched;
+        Projectile newProjectile = GameManager.Instance.GetInactiveProjectile();
+        newProjectile.transform.position = _turretFirePoint.position;
+        newProjectile.transform.rotation = projectileRotation;
+        newProjectile.Activate();
 
         // Increment the number of projectiles launched
         GameManager.Instance.IncrementNumProjectilesLaunched();

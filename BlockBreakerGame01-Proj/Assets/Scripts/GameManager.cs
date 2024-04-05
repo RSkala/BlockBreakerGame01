@@ -91,6 +91,12 @@ public class GameManager : MonoBehaviour
     // The elapsed time the player played the most recent game session
     float _gameSessionTime;
 
+    // Projectile Pool
+    List<Projectile> _projectilePool = new List<Projectile>();
+
+    // Projectile pool size
+    const int kMaxProjectiles = 200;
+
     enum GameProgressionType
     {
         InOrder,
@@ -119,6 +125,10 @@ public class GameManager : MonoBehaviour
         _startRandomGameButton.onClick.AddListener(OnStartRandomGameButtonClicked);
         _playAgainButton.onClick.AddListener(OnPlayAgainButtonClicked);
 
+        // Init Projectile Parent and Projectile Pool
+        CreateProjectileParent();
+        InitProjectilePool();
+
         // Show Title screen
         _startGameScreen.SetActive(true);
 
@@ -133,6 +143,14 @@ public class GameManager : MonoBehaviour
         if(_gameLayoutPrefabs.Length <= 0 && _gameLayoutOverride != null)
         {
             Debug.LogWarning("There are no game layout prefabs assigned in the GameManager Inspector. A game will not be created.");
+        }
+    }
+
+    void InitProjectilePool()
+    {
+        for(int i = 0; i < kMaxProjectiles; ++i)
+        {
+            CreateAndAddNewProjectile();
         }
     }
 
@@ -236,9 +254,6 @@ public class GameManager : MonoBehaviour
         // Reset Projectile count
         NumProjectilesLaunched = 0;
 
-        // Create the projectile parent container in the scene
-        CreateProjectileParent();
-
         // Create Game Layout
         CreateGameLayout();
 
@@ -301,8 +316,8 @@ public class GameManager : MonoBehaviour
         // Player has destroyed all breakable blocks in the scene. Remove the current game layout.
         Destroy(_currentGameLayout.gameObject);
 
-        // Destroy the projectile parent transform, so all active projectiles will be destroyed
-        Destroy(ProjectileParentTransform.gameObject);
+        // Deactivate all projectiles in the pool
+        SetAllProjectilesInactive();
 
         // Set projectile summary text
         _projectileSummaryText.text = "You fired " + NumProjectilesLaunched + " projectiles this round!";
@@ -337,4 +352,32 @@ public class GameManager : MonoBehaviour
     }
 
     public void IncrementNumProjectilesLaunched() => NumProjectilesLaunched++;
+
+    Projectile CreateAndAddNewProjectile()
+    {
+        Projectile newProjectile = GameObject.Instantiate<Projectile>(ProjectilePrefab, Vector3.zero, Quaternion.identity, ProjectileParentTransform);
+        newProjectile.name = "Projectile-" + _projectilePool.Count;
+        _projectilePool.Add(newProjectile);
+        return newProjectile;
+    }
+
+    public Projectile GetInactiveProjectile()
+    {
+        Projectile inactiveProjectile = _projectilePool.FirstOrDefault(projectile => !projectile.IsActive);
+        if(inactiveProjectile == null)
+        {
+            // No inactive projectiles available in the pool. Log warning and create a new one.
+            Debug.LogWarning("No available projectiles in the pool. Increase the pool size.");
+            inactiveProjectile = CreateAndAddNewProjectile();
+        }
+        return inactiveProjectile;
+    }
+
+    void SetAllProjectilesInactive()
+    {
+        foreach(Projectile projectile in _projectilePool)
+        {
+            projectile.Deactivate();
+        }
+    }
 }

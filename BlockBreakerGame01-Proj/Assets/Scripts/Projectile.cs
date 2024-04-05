@@ -12,15 +12,19 @@ public class Projectile : MonoBehaviour
     [Tooltip("How much damage a projectile deals to a breakable block")]
     [SerializeField] int _damage;
 
+    public bool IsActive { get; private set; } = false;
+
     Rigidbody2D _rigidbody2D;
     float _timeAlive;
 
     void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _timeAlive = 0.0f;
 
         CheckInspectorValues();
+
+        // Start all projectiles deactivated
+        Deactivate();
     }
 
     void CheckInspectorValues()
@@ -54,7 +58,7 @@ public class Projectile : MonoBehaviour
         _timeAlive += Time.fixedDeltaTime;
         if(_timeAlive >= _lifetime)
         {
-            Destroy(gameObject);
+            Deactivate();
         }
     }
 
@@ -99,5 +103,19 @@ public class Projectile : MonoBehaviour
             float angle = Vector2.SignedAngle(Vector2.up, reflectionVector);
             transform.rotation = Quaternion.Euler(0.0f, 0.0f, angle);
         }
+    }
+
+    public void Activate()
+    {
+        _timeAlive = 0.0f;
+        IsActive = true;
+        gameObject.SetActive(true);
+    }
+
+    public void Deactivate()
+    {
+        _timeAlive = 0.0f;
+        IsActive = false;
+        gameObject.SetActive(false);
     }
 }
