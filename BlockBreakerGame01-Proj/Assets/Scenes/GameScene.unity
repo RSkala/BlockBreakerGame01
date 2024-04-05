@@ -1077,6 +1077,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020487439}
   m_CullTransparentMesh: 1
+--- !u!1 &1123847696
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1123847697}
+  - component: {fileID: 1123847699}
+  - component: {fileID: 1123847698}
+  m_Layer: 5
+  m_Name: Projectile Summary Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1123847697
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123847696}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1508985601}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 53.870667, y: 18.5103}
+  m_SizeDelta: {x: 1180.7898, y: 127.1792}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1123847698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123847696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 30
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 39
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: You fired XXXXXXXXXXXXXX projectiles this round!
+--- !u!222 &1123847699
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123847696}
+  m_CullTransparentMesh: 1
 --- !u!1 &1166669558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1206,7 +1285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.40227598, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1282,16 +1361,17 @@ MonoBehaviour:
   _playerTurretPrefab: {fileID: 8454559453444742606, guid: 4555d78a27dde4236add83afa96a6dfb, type: 3}
   <ProjectilePrefab>k__BackingField: {fileID: 5627571015695138091, guid: d09c13da8980549e38fc87ea46e7eee5, type: 3}
   _endGameDelay: 2
-  _startGameScreen: {fileID: 855783927}
-  _startInOrderGameButton: {fileID: 924093334}
-  _startRandomGameButton: {fileID: 798054655}
-  _gameOverScreen: {fileID: 1508985600}
-  _playAgainButton: {fileID: 1020487441}
   _gameLayoutPrefabs:
   - {fileID: 8602943835231455188, guid: 7b0e7f0e345d54fc090e3f02685cad9e, type: 3}
   - {fileID: 8602943835231455188, guid: 652f3aa843dd44ff8b95aadefa5a9d05, type: 3}
   - {fileID: 8602943835231455188, guid: 09b871460b5ca4dca843367eb718b1d2, type: 3}
   - {fileID: 8602943835231455188, guid: f4503461a9c9642e9b4e4ebe18b6a49f, type: 3}
+  _startGameScreen: {fileID: 855783927}
+  _startInOrderGameButton: {fileID: 924093334}
+  _startRandomGameButton: {fileID: 798054655}
+  _gameOverScreen: {fileID: 1508985600}
+  _playAgainButton: {fileID: 1020487441}
+  _projectileSummaryText: {fileID: 1123847698}
   _gameLayoutOverride: {fileID: 0}
   <EnableLogger>k__BackingField: 1
   <LogMessagesToUnityConsole>k__BackingField: 0
@@ -1327,6 +1407,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1289648227}
+  - {fileID: 1123847697}
   - {fileID: 1020487440}
   m_Father: {fileID: 339752137}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

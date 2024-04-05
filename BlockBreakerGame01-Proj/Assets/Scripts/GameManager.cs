@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Player / Game")]
     [Tooltip("The player turret from which projectiles are fired")]
     [SerializeField] PlayerTurret _playerTurretPrefab;
 
@@ -16,6 +17,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("Number of seconds to wait until after the last brick is broken to display the game over screen")]
     [SerializeField] float _endGameDelay;
 
+    [Tooltip("The list of Game Layouts to choose from to play")]
+    [SerializeField] GameLayout[] _gameLayoutPrefabs;
+
+    [Header("UI")]
     [Tooltip("Title / Start Game screen. Displayed when the game starts")]
     [SerializeField] GameObject _startGameScreen;
 
@@ -31,8 +36,8 @@ public class GameManager : MonoBehaviour
     [Tooltip("Press to start game in the Game Over / You Win screen")]
     [SerializeField] Button _playAgainButton;
 
-    [Tooltip("The list of Game Layouts to choose from to play")]
-    [SerializeField] GameLayout[] _gameLayoutPrefabs;
+    [Tooltip("Information about the player's projectiles at game end")]
+    [SerializeField] Text _projectileSummaryText;
 
     [Header("Debug")]
     [Tooltip("Always use the selected game layout. This will override the layout prefab list and should be for debugging only!")]
@@ -270,6 +275,9 @@ public class GameManager : MonoBehaviour
 
         // Destroy the projectile parent transform, so all active projectiles will be destroyed
         Destroy(ProjectileParentTransform.gameObject);
+
+        // Set projectile summary text
+        _projectileSummaryText.text = "You fired " + NumProjectilesLaunched + " projectiles this round!";
 
         // Show the Game Over / You Win screen
         _gameOverScreen.SetActive(true);
