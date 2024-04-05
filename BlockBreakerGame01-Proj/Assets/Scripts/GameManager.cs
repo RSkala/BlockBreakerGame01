@@ -97,6 +97,9 @@ public class GameManager : MonoBehaviour
     // Projectile pool size
     const int kMaxProjectiles = 200;
 
+    // Safety check in case the end game is called again during the game over screen delay
+    bool _isGameEnding = false;
+
     enum GameProgressionType
     {
         InOrder,
@@ -271,6 +274,8 @@ public class GameManager : MonoBehaviour
 
         // Record the current time
         _gameStartTime = Time.realtimeSinceStartup;
+
+        _isGameEnding = false;
     }
 
     void CreateProjectileParent()
@@ -301,6 +306,13 @@ public class GameManager : MonoBehaviour
         --_numActiveBreakableBlocks;
         if(_numActiveBreakableBlocks <= 0)
         {
+            if(_isGameEnding)
+            {
+                return;
+            }
+            
+            _isGameEnding = true;
+
             // Record game session time elapsed
             _gameSessionTime = Time.realtimeSinceStartup - _gameStartTime;
 
@@ -331,6 +343,8 @@ public class GameManager : MonoBehaviour
 
         // Show the Game Over / You Win screen
         _gameOverScreen.SetActive(true);
+
+        _isGameEnding = false;
     }
 
     void OnStartInOrderGameButtonClicked()

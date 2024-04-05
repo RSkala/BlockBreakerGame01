@@ -14,6 +14,9 @@ public class BreakableBlock : MonoBehaviour
     [Tooltip("Used for setting the color of a block which represents its damage state")]
     [SerializeField] SpriteRenderer _spriteRenderer;
 
+    // Fail-safe in case this block is hit by multiple projectiles in the same (or nearly the same) frame
+    bool _isDestroyed = false;
+
     void Start()
     {
         if(_health <= 0)
@@ -22,6 +25,7 @@ public class BreakableBlock : MonoBehaviour
         }
 
         SetHealthColor();
+        _isDestroyed = false;
     }
 
     void OnValidate()
@@ -37,11 +41,18 @@ public class BreakableBlock : MonoBehaviour
             return;
         }
 
+        // Do nothing more to this block, as it is already destroyed.
+        if(_isDestroyed)
+        {
+            return;
+        }
+
         // Handle damage and remove this block from the scene if it runs out of health
         _health -= damage;
         _health = Mathf.Max(_health, 0);
         if(_health <= 0)
         {
+            _isDestroyed = true;
             gameObject.SetActive(false);
             GameManager.Instance.OnBreakableBlockDestroyed();
             GameManager.Instance.GameLogger.LogBlockDestroyed(this);
