@@ -137,12 +137,13 @@ GUI.matrix = Matrix4x4.TRS(new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity, s
 
 * Towards the end of development, while testing my levels, I found that on occasion, I would get a null reference exception when a level completed. This was in `GameManager.EndGame` and `_currentGameLayout` was null. To address the exception, I wrapped a null reference check around it (I first assumed it maybe could be due to garbage collection). However, when trying to test and confirm a fix, I saw that sometimes that `GameManager.EndGame` was getting called multiple times.
 * I actually finally figured out this issue because of the Console logger required of the spec!
-* Here's a screenshot of the log:<br>
-<img src="./Screenshots/end-game-null-reference.png" width=300/>
 * You can see that three projectiles hit `BreakableBlock (13)`. It's health was already at zero, so the destroy was called three times.
 * I fixed this by adding an `_isDestroyed` field to `BreakableBlock` 
 * Null reference exception addressed in this [Commit](https://github.com/RSkala/BlockBreakerGame01/commit/9242d12870aba1c06f4d3b10c9716266d3940b9b)
 * The actual fix is in this [Commit](https://github.com/RSkala/BlockBreakerGame01/commit/39229daa04301bbf7cb981054cb1895fac796220)
+
+Here's a screenshot of the log:<br>
+<img src="./Screenshots/end-game-null-reference.png" width=300/>
 
 #
 
