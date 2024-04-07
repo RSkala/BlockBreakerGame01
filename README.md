@@ -25,7 +25,7 @@ I am pleased to present **Super Block Breaker**, a fun, original take on the bri
 * In Unity, Open the Unity project directory `BlockBreakerGame01-Proj` (located in the directory where you cloned the repo).
 * Open the scene named `GameScene` located in `Assets/Scenes` 
 * Press **Play** button in the Unity editor
-    * Note: You can also play on Desktop web on [itch.io](https://rskala.itch.io/block-breaker-01?secret=RxUOX55LXQJnUiYvZMWTjHRgpU) !
+    * Note: You can also play on Desktop web on [itch.io](https://rskala.itch.io/block-breaker-01?secret=RxUOX55LXQJnUiYvZMWTjHRgpU) ! (does not work on mobile yet)
 
 **Playing the Game** <br>
 * There are 10 playable game scenes total.
