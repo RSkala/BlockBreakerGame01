@@ -5,6 +5,8 @@ I am pleased to present **Super Block Breaker**, a fun, original take on the bri
 
 <img src="./Screenshots/block-breaker-screenshot-01.png" width=400/>
 
+Play this prototype on your computer's web browser [here](https://rskala.itch.io/block-breaker-01?secret=RxUOX55LXQJnUiYvZMWTjHRgpU)!
+
 #
 
 <!---------------------------------------------------------------------------->
