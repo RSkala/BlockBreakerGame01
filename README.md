@@ -7,6 +7,8 @@ I am pleased to present **Super Block Breaker**, a fun, original take on the bri
 
 Play this prototype on your computer's web browser [here](https://rskala.itch.io/block-breaker-01?secret=RxUOX55LXQJnUiYvZMWTjHRgpU)!
 
+(Note: This was a take-home project that I have no plans on actively maintaining.)
+
 #
 
 <!---------------------------------------------------------------------------->
